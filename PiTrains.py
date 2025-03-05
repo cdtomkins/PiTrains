@@ -26,10 +26,12 @@ ServiceStatus = []
 Services = []
 LEDs = [0]*AVAILABLELEDCOUNT
 
+train_services = DEPARTUREBOARD.train_services
+
 # Populate ServiceStatus and Services.
 # White=5=imminent/just left, Green=4=on time, yellow=3=late, blue=2=unspecified delay, red=1=cancelled, black=0=none
 # We also check and deal with trains that wrap over midnight
-for service in DEPARTUREBOARD.train_services:
+for service in train_services:
 
     ServiceStatus.append((service.std, service.etd))
     STD = datetime.strptime(CURRENTYMD+service.std, '%Y-%m-%d%H:%M')
