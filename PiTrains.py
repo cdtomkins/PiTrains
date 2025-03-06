@@ -4,6 +4,7 @@
 # Expects DEPARTURE_CRS_CODE environment variable (e.g. "GTW" - the departure station that we're interested in)
 # Expects DESTINATION_CRS_CODE environment variable (e.g. "BTN" - the destination station that we're interested in)
 
+import argparse
 import os
 from datetime import datetime, timedelta
 from nredarwin.webservice import DarwinLdbSession
@@ -13,6 +14,11 @@ try:
     GOT_BLINKT=True
 except RuntimeError:
     GOT_BLINKT=False
+
+# Hangle args
+parser = argparse.ArgumentParser(description="Live train notification tool for Raspberry Pi and Blinkt!")
+parser.add_argument("--chatty", action="store_true", help="enable CLI output even if a Blinkt! is detected")
+args = parser.parse_args()
 
 # Initialise constants
 AVAILABLELEDCOUNT = 8 # Total number of LEDs available; this should be 8 if you're using a Blinkt!
@@ -101,8 +107,9 @@ if GOT_BLINKT:
             set_pixel(AVAILABLELEDCOUNT-1-idx,1,0,0)
     set_clear_on_exit(False)
     show()
-# Otherwise, pprint them
-else:
+
+# Print to CLI if requested or if we don't have a Blinkt!
+if args.chatty or not GOT_BLINKT:
     DATA_TO_OUTPUT = {
         "DEPARTURE_CRS_CODE": os.environ["DEPARTURE_CRS_CODE"],
         "DESTINATION_CRS_CODE": os.environ["DESTINATION_CRS_CODE"],
