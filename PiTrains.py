@@ -12,7 +12,7 @@ from pprint import pprint
 try:
     from blinkt import set_pixel, set_clear_on_exit, show
     GOT_BLINKT=True
-except RuntimeError:
+except (ImportError, RuntimeError):
     GOT_BLINKT=False
 
 # Hangle args
